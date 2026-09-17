@@ -83,7 +83,7 @@ fun SecurityLoginScreen(
 ) {
 
     var username by remember {
-        mutableStateOf("")
+        mutableStateOf(securityManager.getUsername())
     }
 
     var password by remember {

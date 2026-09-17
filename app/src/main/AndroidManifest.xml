@@ -5,8 +5,8 @@
     <!-- SMS Permission -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
-    <!-- Biometric / Fingerprint Permission -->
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <!-- Internet Permission for Update Check -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:theme="@style/Theme.MyExpenseAnalyzer"

@@ -18,6 +18,18 @@ class SecurityManager(context: Context) {
                 prefs.getString("password", null) != null
     }
 
+    // =========================
+    // GET SAVED USERNAME
+    // =========================
+
+    fun getUsername(): String {
+        return prefs.getString("username", "") ?: ""
+    }
+
+    // =========================
+    // SAVE ACCOUNT
+    // =========================
+
     fun setAccount(
         username: String,
         password: String
@@ -27,6 +39,10 @@ class SecurityManager(context: Context) {
             .putString("password", password)
             .apply()
     }
+
+    // =========================
+    // VERIFY ACCOUNT
+    // =========================
 
     fun verifyAccount(
         username: String,
@@ -42,6 +58,10 @@ class SecurityManager(context: Context) {
         return savedUsername == username &&
                 savedPassword == password
     }
+
+    // =========================
+    // REMOVE ACCOUNT
+    // =========================
 
     fun removeAccount() {
         prefs.edit()

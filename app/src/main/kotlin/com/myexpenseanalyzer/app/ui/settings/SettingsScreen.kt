@@ -17,11 +17,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Brightness4
-import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -32,7 +31,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -50,18 +48,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.myexpenseanalyzer.app.BuildConfig
 import com.myexpenseanalyzer.app.data.entity.TransactionEntity
 import com.myexpenseanalyzer.app.security.SecurityManager
 import com.myexpenseanalyzer.app.util.shareCsv
 
+
 private val FinzoBlack = Color(0xFF0D0D0F)
 private val FinzoCard = Color(0xFF18181B)
 private val FinzoOrange = Color(0xFFFF8A00)
-private val FinzoOrangeLight = Color(0xFFFFB347)
 private val FinzoWhite = Color(0xFFFFFFFF)
 private val FinzoGray = Color(0xFFA1A1AA)
 private val FinzoDarkGray = Color(0xFF27272A)
 private val FinzoRed = Color(0xFFFF5C5C)
+
 
 @Composable
 fun SettingsScreen(
@@ -85,19 +85,23 @@ fun SettingsScreen(
         mutableStateOf(false)
     }
 
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(FinzoBlack)
             .padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
+        // =====================================================
         // HEADER
+        // =====================================================
+
         item {
 
             Spacer(
-                modifier = Modifier.height(18.dp)
+                modifier = Modifier.height(16.dp)
             )
 
             Text(
@@ -109,7 +113,7 @@ fun SettingsScreen(
             )
 
             Spacer(
-                modifier = Modifier.height(4.dp)
+                modifier = Modifier.height(3.dp)
             )
 
             Text(
@@ -126,12 +130,16 @@ fun SettingsScreen(
             )
         }
 
-        // ACCOUNT
+
+        // =====================================================
+        // PROFILE CARD
+        // =====================================================
+
         item {
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(22.dp),
+                shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = FinzoCard
                 )
@@ -146,7 +154,7 @@ fun SettingsScreen(
 
                     Box(
                         modifier = Modifier
-                            .size(58.dp)
+                            .size(60.dp)
                             .clip(CircleShape)
                             .background(FinzoOrange),
                         contentAlignment = Alignment.Center
@@ -156,7 +164,7 @@ fun SettingsScreen(
                             imageVector = Icons.Default.AccountCircle,
                             contentDescription = null,
                             tint = Color.Black,
-                            modifier = Modifier.size(38.dp)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
 
@@ -171,12 +179,12 @@ fun SettingsScreen(
                         Text(
                             text =
                                 if (securityManager.hasAccount()) {
-                                    "Finzo Account"
+                                    securityManager.getUsername()
                                 } else {
                                     "Finzo User"
                                 },
                             color = FinzoWhite,
-                            fontSize = 17.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -187,7 +195,7 @@ fun SettingsScreen(
                         Text(
                             text =
                                 if (securityManager.hasAccount()) {
-                                    "Username & Password protection enabled"
+                                    "Username & Password protected"
                                 } else {
                                     "Personal expense manager"
                                 },
@@ -199,82 +207,85 @@ fun SettingsScreen(
             }
         }
 
-        // APPEARANCE
+
+        // =====================================================
+        // PREFERENCES
+        // =====================================================
+
         item {
 
             SettingsSectionTitle(
-                icon = Icons.Default.Brightness4,
-                title = "Appearance"
+                title = "Preferences"
             )
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier = Modifier.height(6.dp)
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = FinzoCard
                 )
             ) {
 
                 Column(
-                    modifier = Modifier.padding(vertical = 6.dp)
+                    modifier = Modifier.padding(vertical = 5.dp)
                 ) {
 
-                    ThemeRow(
-                        icon = Icons.Default.LightMode,
-                        label = "Light",
-                        selected = selectedTheme == false,
+                    SettingsValueRow(
+                        icon = Icons.Default.Brightness4,
+                        title = "Theme",
+                        subtitle = "Always use dark mode",
+                        value = "Dark",
                         onClick = {
-                            onThemeChange(false)
-                        }
-                    )
-
-                    ThemeRow(
-                        icon = Icons.Default.DarkMode,
-                        label = "Dark",
-                        selected = selectedTheme == true,
-                        onClick = {
+                            // Finzo is dark-theme only
                             onThemeChange(true)
                         }
                     )
 
-                    ThemeRow(
-                        icon = Icons.Default.Brightness4,
-                        label = "System Default",
-                        selected = selectedTheme == null,
-                        onClick = {
-                            onThemeChange(null)
-                        }
+                    HorizontalDivider(
+                        color = FinzoDarkGray,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+
+                    SettingsValueRow(
+                        icon = Icons.Default.AccountCircle,
+                        title = "Currency",
+                        subtitle = "Default currency",
+                        value = "LKR",
+                        onClick = null
                     )
                 }
             }
         }
 
+
+        // =====================================================
         // SECURITY
+        // =====================================================
+
         item {
 
             SettingsSectionTitle(
-                icon = Icons.Default.Lock,
                 title = "Security"
             )
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier = Modifier.height(6.dp)
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = FinzoCard
                 )
             ) {
 
                 Column(
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(vertical = 5.dp)
                 ) {
 
                     if (securityManager.hasAccount()) {
@@ -290,9 +301,7 @@ fun SettingsScreen(
 
                         HorizontalDivider(
                             color = FinzoDarkGray,
-                            modifier = Modifier.padding(
-                                horizontal = 10.dp
-                            )
+                            modifier = Modifier.padding(horizontal = 16.dp)
                         )
 
                         SettingsActionRow(
@@ -309,16 +318,24 @@ fun SettingsScreen(
                         Text(
                             text = "Username and password account is not configured.",
                             color = FinzoGray,
-                            modifier = Modifier.padding(16.dp),
-                            fontSize = 13.sp
+                            fontSize = 13.sp,
+                            modifier = Modifier.padding(18.dp)
                         )
                     }
                 }
             }
         }
 
-        // LOCK
+
+        // =====================================================
+        // LOCK FINZO
+        // =====================================================
+
         item {
+
+            Spacer(
+                modifier = Modifier.height(2.dp)
+            )
 
             Card(
                 modifier = Modifier
@@ -326,59 +343,92 @@ fun SettingsScreen(
                     .clickable {
                         onLockApp()
                     },
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color(0xFF211719)
                 )
             ) {
 
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 14.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    SettingsIcon(
-                        icon = Icons.Default.Lock,
-                        iconColor = FinzoRed
-                    )
+                    Box(
+                        modifier = Modifier
+                            .size(42.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFF302022)),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = null,
+                            tint = FinzoRed,
+                            modifier = Modifier.size(21.dp)
+                        )
+                    }
 
                     Spacer(
                         modifier = Modifier.size(12.dp)
                     )
 
-                    Column {
+                    Column(
+                        modifier = Modifier.weight(1f)
+                    ) {
 
                         Text(
                             text = "Lock Finzo",
                             color = FinzoWhite,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold
+                        )
+
+                        Spacer(
+                            modifier = Modifier.height(3.dp)
                         )
 
                         Text(
                             text = "Lock the app immediately",
                             color = FinzoGray,
-                            fontSize = 12.sp
+                            fontSize = 11.sp
                         )
                     }
+
+                    Icon(
+                        imageVector = Icons.Default.ArrowForwardIos,
+                        contentDescription = null,
+                        tint = FinzoRed,
+                        modifier = Modifier.size(15.dp)
+                    )
                 }
             }
         }
 
-        // EXPORT
+
+        // =====================================================
+        // DATA & EXPORT
+        // =====================================================
+
         item {
 
             SettingsSectionTitle(
-                icon = Icons.Default.FileUpload,
                 title = "Data & Export"
             )
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier = Modifier.height(6.dp)
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = FinzoCard
                 )
@@ -399,84 +449,34 @@ fun SettingsScreen(
                 Text(
                     text = "Includes Date, Type, Amount, Description, Category, Payment Method and Notes.",
                     modifier = Modifier.padding(
-                        start = 68.dp,
+                        start = 70.dp,
                         end = 18.dp,
                         bottom = 16.dp
                     ),
                     color = FinzoGray,
-                    fontSize = 11.sp
+                    fontSize = 10.sp
                 )
             }
         }
 
-        // CURRENCY
-        item {
 
-            SettingsSectionTitle(
-                icon = Icons.Default.AccountCircle,
-                title = "Currency"
-            )
-
-            Spacer(
-                modifier = Modifier.height(8.dp)
-            )
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = FinzoCard
-                )
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    SettingsIcon(
-                        icon = Icons.Default.AccountCircle
-                    )
-
-                    Spacer(
-                        modifier = Modifier.size(12.dp)
-                    )
-
-                    Column {
-
-                        Text(
-                            text = "Sri Lankan Rupee",
-                            color = FinzoWhite,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Text(
-                            text = "LKR / Rs.",
-                            color = FinzoGray,
-                            fontSize = 12.sp
-                        )
-                    }
-                }
-            }
-        }
-
+        // =====================================================
         // ABOUT
+        // =====================================================
+
         item {
 
             SettingsSectionTitle(
-                icon = Icons.Default.Info,
-                title = "About Finzo"
+                title = "About"
             )
 
             Spacer(
-                modifier = Modifier.height(8.dp)
+                modifier = Modifier.height(6.dp)
             )
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(20.dp),
+                shape = RoundedCornerShape(22.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = FinzoCard
                 )
@@ -492,18 +492,16 @@ fun SettingsScreen(
 
                         Box(
                             modifier = Modifier
-                                .size(46.dp)
-                                .background(
-                                    FinzoOrange,
-                                    RoundedCornerShape(14.dp)
-                                ),
+                                .size(48.dp)
+                                .clip(RoundedCornerShape(14.dp))
+                                .background(FinzoOrange),
                             contentAlignment = Alignment.Center
                         ) {
 
                             Text(
                                 text = "F",
                                 color = Color.Black,
-                                fontSize = 23.sp,
+                                fontSize = 24.sp,
                                 fontWeight = FontWeight.Black
                             )
                         }
@@ -533,33 +531,68 @@ fun SettingsScreen(
                         modifier = Modifier.height(14.dp)
                     )
 
-                    Text(
-                        text = "Version 1.0",
-                        color = FinzoGray,
-                        fontSize = 12.sp
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "Version",
+                            color = FinzoGray,
+                            fontSize = 12.sp
+                        )
+
+                        Text(
+                            text = BuildConfig.VERSION_NAME,
+                            color = FinzoWhite,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
 
                     Spacer(
-                        modifier = Modifier.height(4.dp)
+                        modifier = Modifier.height(8.dp)
                     )
 
-                    Text(
-                        text = "Powered by Krish",
-                        color = FinzoOrange,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        Text(
+                            text = "Developer",
+                            color = FinzoGray,
+                            fontSize = 12.sp
+                        )
+
+                        Text(
+                            text = "Krish",
+                            color = FinzoOrange,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
             }
         }
 
+
+        // =====================================================
+        // BOTTOM SPACE
+        // =====================================================
+
         item {
 
             Spacer(
-                modifier = Modifier.height(70.dp)
+                modifier = Modifier.height(80.dp)
             )
         }
     }
+
+
+    // =========================================================
+    // CHANGE PASSWORD DIALOG
+    // =========================================================
 
     if (showChangePassword) {
 
@@ -570,6 +603,11 @@ fun SettingsScreen(
             }
         )
     }
+
+
+    // =========================================================
+    // CHANGE USERNAME DIALOG
+    // =========================================================
 
     if (showChangeUsername) {
 
@@ -582,43 +620,119 @@ fun SettingsScreen(
     }
 }
 
-// =====================================================
+
+// =============================================================
 // SECTION TITLE
-// =====================================================
+// =============================================================
 
 @Composable
 private fun SettingsSectionTitle(
-    icon: ImageVector,
     title: String
 ) {
 
+    Text(
+        text = title.uppercase(),
+        color = FinzoOrange,
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 1.4.sp,
+        modifier = Modifier.padding(
+            start = 4.dp,
+            top = 4.dp
+        )
+    )
+}
+
+
+// =============================================================
+// SETTINGS VALUE ROW
+// =============================================================
+
+@Composable
+private fun SettingsValueRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    value: String,
+    onClick: (() -> Unit)?
+) {
+
     Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable {
+                        onClick()
+                    }
+                } else {
+                    Modifier
+                }
+            )
+            .padding(
+                horizontal = 12.dp,
+                vertical = 11.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = FinzoOrange,
-            modifier = Modifier.size(20.dp)
+        SettingsIcon(
+            icon = icon
         )
 
         Spacer(
-            modifier = Modifier.size(8.dp)
+            modifier = Modifier.size(12.dp)
         )
 
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+
+            Text(
+                text = title,
+                color = FinzoWhite,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Spacer(
+                modifier = Modifier.height(2.dp)
+            )
+
+            Text(
+                text = subtitle,
+                color = FinzoGray,
+                fontSize = 11.sp
+            )
+        }
+
         Text(
-            text = title,
-            color = FinzoWhite,
-            fontSize = 15.sp,
+            text = value,
+            color = FinzoOrange,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Bold
         )
+
+        if (onClick != null) {
+
+            Spacer(
+                modifier = Modifier.size(8.dp)
+            )
+
+            Icon(
+                imageVector = Icons.Default.ArrowForwardIos,
+                contentDescription = null,
+                tint = FinzoGray,
+                modifier = Modifier.size(14.dp)
+            )
+        }
     }
 }
 
-// =====================================================
+
+// =============================================================
 // SETTINGS ICON
-// =====================================================
+// =============================================================
 
 @Composable
 private fun SettingsIcon(
@@ -643,56 +757,10 @@ private fun SettingsIcon(
     }
 }
 
-// =====================================================
-// THEME ROW
-// =====================================================
 
-@Composable
-private fun ThemeRow(
-    icon: ImageVector,
-    label: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onClick()
-            }
-            .padding(
-                horizontal = 12.dp,
-                vertical = 5.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        SettingsIcon(
-            icon = icon
-        )
-
-        Spacer(
-            modifier = Modifier.size(12.dp)
-        )
-
-        Text(
-            text = label,
-            color = FinzoWhite,
-            modifier = Modifier.weight(1f),
-            fontSize = 14.sp
-        )
-
-        RadioButton(
-            selected = selected,
-            onClick = onClick
-        )
-    }
-}
-
-// =====================================================
-// ACTION ROW
-// =====================================================
+// =============================================================
+// SETTINGS ACTION ROW
+// =============================================================
 
 @Composable
 private fun SettingsActionRow(
@@ -708,7 +776,10 @@ private fun SettingsActionRow(
             .clickable {
                 onClick()
             }
-            .padding(8.dp),
+            .padding(
+                horizontal = 12.dp,
+                vertical = 11.dp
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -731,18 +802,30 @@ private fun SettingsActionRow(
                 fontWeight = FontWeight.SemiBold
             )
 
+            Spacer(
+                modifier = Modifier.height(2.dp)
+            )
+
             Text(
                 text = subtitle,
                 color = FinzoGray,
                 fontSize = 11.sp
             )
         }
+
+        Icon(
+            imageVector = Icons.Default.ArrowForwardIos,
+            contentDescription = null,
+            tint = FinzoGray,
+            modifier = Modifier.size(14.dp)
+        )
     }
 }
 
-// =====================================================
+
+// =============================================================
 // CHANGE PASSWORD
-// =====================================================
+// =============================================================
 
 @Composable
 private fun ChangePasswordDialog(
@@ -769,6 +852,7 @@ private fun ChangePasswordDialog(
     var error by remember {
         mutableStateOf("")
     }
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -887,11 +971,13 @@ private fun ChangePasswordDialog(
                         }
                     }
                 },
+
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FinzoOrange,
                     contentColor = Color.Black
                 )
             ) {
+
                 Text(
                     text = "SAVE",
                     fontWeight = FontWeight.Bold
@@ -904,6 +990,7 @@ private fun ChangePasswordDialog(
             TextButton(
                 onClick = onDismiss
             ) {
+
                 Text(
                     text = "CANCEL",
                     color = FinzoOrange
@@ -913,9 +1000,10 @@ private fun ChangePasswordDialog(
     )
 }
 
-// =====================================================
+
+// =============================================================
 // CHANGE USERNAME
-// =====================================================
+// =============================================================
 
 @Composable
 private fun ChangeUsernameDialog(
@@ -938,6 +1026,7 @@ private fun ChangeUsernameDialog(
     var error by remember {
         mutableStateOf("")
     }
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -1034,11 +1123,13 @@ private fun ChangeUsernameDialog(
                         }
                     }
                 },
+
                 colors = ButtonDefaults.buttonColors(
                     containerColor = FinzoOrange,
                     contentColor = Color.Black
                 )
             ) {
+
                 Text(
                     text = "SAVE",
                     fontWeight = FontWeight.Bold
@@ -1051,6 +1142,7 @@ private fun ChangeUsernameDialog(
             TextButton(
                 onClick = onDismiss
             ) {
+
                 Text(
                     text = "CANCEL",
                     color = FinzoOrange
