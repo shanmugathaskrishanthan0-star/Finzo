@@ -4,3 +4,10 @@ build/
 */build/
 local.properties
 *.iml
+# Finzo release files
+app/debug/
+app/release/
+
+# Signing keys
+*.jks
+*.keystore
