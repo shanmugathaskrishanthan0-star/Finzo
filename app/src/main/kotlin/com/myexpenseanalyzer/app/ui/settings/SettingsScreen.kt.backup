@@ -1,4 +1,4 @@
-﻿package com.myexpenseanalyzer.app.ui.settings
+package com.myexpenseanalyzer.app.ui.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.FileUpload
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.AlertDialog
@@ -67,10 +68,55 @@ private val FinzoGray = Color(0xFFA1A1AA)
 private val FinzoDarkGray = Color(0xFF27272A)
 private val FinzoRed = Color(0xFFFF5C5C)
 
+data class FinzoLanguage(
+    val name: String,
+    val nativeName: String,
+    val code: String
+)
+
+private val finzoLanguages = listOf(
+    FinzoLanguage("English", "English", "en"),
+    FinzoLanguage("Tamil", "தமிழ்", "ta"),
+    FinzoLanguage("Sinhala", "සිංහල", "si"),
+    FinzoLanguage("Hindi", "हिन्दी", "hi"),
+    FinzoLanguage("Bengali", "বাংলা", "bn"),
+    FinzoLanguage("Telugu", "తెలుగు", "te"),
+    FinzoLanguage("Marathi", "मराठी", "mr"),
+    FinzoLanguage("Gujarati", "ગુજરાતી", "gu"),
+    FinzoLanguage("Kannada", "ಕನ್ನಡ", "kn"),
+    FinzoLanguage("Malayalam", "മലയാളം", "ml"),
+    FinzoLanguage("Punjabi", "ਪੰਜਾਬੀ", "pa"),
+    FinzoLanguage("Urdu", "اردو", "ur"),
+    FinzoLanguage("Chinese", "中文", "zh"),
+    FinzoLanguage("Japanese", "日本語", "ja"),
+    FinzoLanguage("Korean", "한국어", "ko"),
+    FinzoLanguage("Arabic", "العربية", "ar"),
+    FinzoLanguage("Spanish", "Español", "es"),
+    FinzoLanguage("French", "Français", "fr"),
+    FinzoLanguage("German", "Deutsch", "de"),
+    FinzoLanguage("Portuguese", "Português", "pt"),
+    FinzoLanguage("Russian", "Русский", "ru"),
+    FinzoLanguage("Italian", "Italiano", "it"),
+    FinzoLanguage("Turkish", "Türkçe", "tr"),
+    FinzoLanguage("Thai", "ไทย", "th"),
+    FinzoLanguage("Vietnamese", "Tiếng Việt", "vi"),
+    FinzoLanguage("Indonesian", "Bahasa Indonesia", "id"),
+    FinzoLanguage("Dutch", "Nederlands", "nl"),
+    FinzoLanguage("Polish", "Polski", "pl"),
+    FinzoLanguage("Ukrainian", "Українська", "uk"),
+    FinzoLanguage("Greek", "Ελληνικά", "el"),
+    FinzoLanguage("Hebrew", "עברית", "he"),
+    FinzoLanguage("Swedish", "Svenska", "sv"),
+    FinzoLanguage("Norwegian", "Norsk", "no"),
+    FinzoLanguage("Danish", "Dansk", "da"),
+    FinzoLanguage("Finnish", "Suomi", "fi")
+)
+
 @Composable
 fun SettingsScreen(
     transactions: List<TransactionEntity>,
-    onLockApp: () -> Unit
+    onLockApp: () -> Unit,
+    onLanguageChange: (String) -> Unit = {}
 ) {
 
     val context = LocalContext.current
@@ -186,6 +232,30 @@ fun SettingsScreen(
 
     var showChangeUsername by remember {
         mutableStateOf(false)
+    }
+
+    var showLanguageDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var selectedLanguage by remember {
+
+        val savedLanguage =
+            context
+                .getSharedPreferences(
+                    "finzo_settings",
+                    android.content.Context.MODE_PRIVATE
+                )
+                .getString(
+                    "language",
+                    "en"
+                ) ?: "en"
+
+        mutableStateOf(
+            finzoLanguages.firstOrNull {
+                it.code == savedLanguage
+            } ?: finzoLanguages.first()
+        )
     }
 
     LazyColumn(
@@ -331,6 +401,15 @@ fun SettingsScreen(
                     modifier = Modifier.padding(vertical = 5.dp)
                 ) {
 
+                    SettingsValueRow(
+                        icon = Icons.Default.Brightness4,
+                        title = stringResource(R.string.theme),
+                        subtitle = stringResource(
+                            R.string.always_dark_mode
+                        ),
+                        value = stringResource(R.string.dark),
+                        onClick = {}
+                    )
 
                     HorizontalDivider(
                         color = FinzoDarkGray,
@@ -356,8 +435,17 @@ fun SettingsScreen(
                         )
                     )
 
-
-
+                    SettingsValueRow(
+                        icon = Icons.Default.Language,
+                        title = stringResource(R.string.language),
+                        subtitle = stringResource(
+                            R.string.choose_language
+                        ),
+                        value = selectedLanguage.nativeName,
+                        onClick = {
+                            showLanguageDialog = true
+                        }
+                    )
                 }
             }
         }
@@ -792,6 +880,25 @@ fun SettingsScreen(
         }
     }
 
+    if (showLanguageDialog) {
+
+        LanguageSelectionDialog(
+            selectedLanguage = selectedLanguage,
+            languages = finzoLanguages,
+
+            onLanguageSelected = { language ->
+
+                selectedLanguage = language
+                showLanguageDialog = false
+                onLanguageChange(language.code)
+            },
+
+            onDismiss = {
+                showLanguageDialog = false
+            }
+        )
+    }
+
     if (showChangePassword) {
 
         ChangePasswordDialog(
@@ -1036,6 +1143,205 @@ fun SettingsScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun LanguageSelectionDialog(
+    selectedLanguage: FinzoLanguage,
+    languages: List<FinzoLanguage>,
+    onLanguageSelected: (FinzoLanguage) -> Unit,
+    onDismiss: () -> Unit
+) {
+
+    var searchText by remember {
+        mutableStateOf("")
+    }
+
+    val filteredLanguages = languages.filter {
+
+        it.name.contains(
+            searchText,
+            ignoreCase = true
+        ) ||
+                it.nativeName.contains(
+                    searchText,
+                    ignoreCase = true
+                )
+    }
+
+    AlertDialog(
+
+        onDismissRequest = onDismiss,
+
+        title = {
+
+            Text(
+                text = stringResource(
+                    R.string.select_language
+                ),
+                fontWeight = FontWeight.Bold
+            )
+        },
+
+        text = {
+
+            Column {
+
+                OutlinedTextField(
+
+                    value = searchText,
+
+                    onValueChange = {
+                        searchText = it
+                    },
+
+                    label = {
+
+                        Text(
+                            stringResource(
+                                R.string.search_language
+                            )
+                        )
+                    },
+
+                    singleLine = true,
+
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(
+                    modifier = Modifier.height(10.dp)
+                )
+
+                LazyColumn(
+                    modifier = Modifier.height(400.dp)
+                ) {
+
+                    items(filteredLanguages) { language ->
+
+                        LanguageRow(
+
+                            language = language,
+
+                            selected =
+                                language.code ==
+                                        selectedLanguage.code,
+
+                            onClick = {
+                                onLanguageSelected(
+                                    language
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+        },
+
+        confirmButton = {
+
+            TextButton(
+                onClick = onDismiss
+            ) {
+
+                Text(
+                    text = stringResource(
+                        R.string.close
+                    ).uppercase(),
+
+                    color = FinzoOrange
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun LanguageRow(
+    language: FinzoLanguage,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+
+    Row(
+
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
+            .padding(
+                horizontal = 8.dp,
+                vertical = 12.dp
+            ),
+
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Box(
+            modifier = Modifier
+                .size(38.dp)
+                .clip(
+                    RoundedCornerShape(10.dp)
+                )
+                .background(
+                    if (selected) {
+                        FinzoOrange
+                    } else {
+                        FinzoDarkGray
+                    }
+                ),
+
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text = language.nativeName.take(2),
+
+                color =
+                    if (selected) {
+                        Color.Black
+                    } else {
+                        FinzoOrange
+                    },
+
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(
+            modifier = Modifier.size(12.dp)
+        )
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+
+            Text(
+                text = language.name,
+                color = FinzoWhite,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            Text(
+                text = language.nativeName,
+                color = FinzoGray,
+                fontSize = 12.sp
+            )
+        }
+
+        if (selected) {
+
+            Text(
+                text = "✓",
+                color = FinzoOrange,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        }
     }
 }
 
@@ -1621,5 +1927,4 @@ private fun ChangeUsernameDialog(
         }
     )
 }
-
 

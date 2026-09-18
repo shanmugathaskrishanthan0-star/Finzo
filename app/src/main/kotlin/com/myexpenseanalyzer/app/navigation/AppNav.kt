@@ -50,6 +50,8 @@ import com.myexpenseanalyzer.app.ui.settings.SettingsScreen
 import com.myexpenseanalyzer.app.ui.transactions.TransactionsScreen
 import com.myexpenseanalyzer.app.viewmodel.ExpenseViewModel
 import kotlin.math.abs
+import androidx.compose.ui.res.stringResource
+import com.myexpenseanalyzer.app.R
 
 data class Dest(
     val route: String,
@@ -60,7 +62,6 @@ data class Dest(
 @Composable
 fun AppNav(
     vm: ExpenseViewModel,
-    onThemeChange: (Boolean?) -> Unit,
     onLockApp: () -> Unit
 ) {
 
@@ -69,9 +70,6 @@ fun AppNav(
     val context = LocalContext.current
     val activity = context as? Activity
 
-    var selectedTheme by remember {
-        mutableStateOf<Boolean?>(null)
-    }
 
     // =====================================================
     // FINZO COLORS
@@ -89,31 +87,31 @@ fun AppNav(
 
         Dest(
             route = "dashboard",
-            label = "Home",
+            label = stringResource(R.string.home),
             icon = Icons.Default.Home
         ),
 
         Dest(
             route = "transactions",
-            label = "History",
+            label = stringResource(R.string.history),
             icon = Icons.Default.List
         ),
 
         Dest(
             route = "add",
-            label = "Add",
+            label = stringResource(R.string.add),
             icon = Icons.Default.Add
         ),
 
         Dest(
             route = "analysis",
-            label = "Analysis",
+            label = stringResource(R.string.analysis),
             icon = Icons.Default.BarChart
         ),
 
         Dest(
             route = "settings",
-            label = "More",
+            label = stringResource(R.string.more),
             icon = Icons.Default.Settings
         )
     )
@@ -829,42 +827,12 @@ fun AppNav(
                                 .collectAsState()
                                 .value,
 
-                        selectedTheme =
-                            selectedTheme,
-
-                        onThemeChange = { theme ->
-
-                            selectedTheme = theme
-
-                            onThemeChange(theme)
-                        },
 
                         // =================================================
                         // LANGUAGE CHANGE
                         // =================================================
 
-                        onLanguageChange = { languageCode ->
 
-                            context
-                                .getSharedPreferences(
-                                    "finzo_settings",
-                                    android.content.Context.MODE_PRIVATE
-                                )
-                                .edit()
-                                .putString(
-                                    "language",
-                                    languageCode
-                                )
-                                .apply()
-
-                            AppCompatDelegate
-                                .setApplicationLocales(
-                                    LocaleListCompat
-                                        .forLanguageTags(
-                                            languageCode
-                                        )
-                                )
-                        },
 
                         onLockApp = {
 

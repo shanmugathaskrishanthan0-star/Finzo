@@ -178,18 +178,11 @@ class MainActivity : FragmentActivity() {
 
             AppNav(
                 vm = expenseViewModel,
-
-                onThemeChange = {
-                    // Finzo uses Dark theme only
-                },
-
                 onLockApp = {
-
-                    showLogin(
-                        securityManager = securityManager
-                    )
+                    showLogin(securityManager = securityManager)
                 }
             )
+
 
             showUpdateDialogIfNeeded()
         }
