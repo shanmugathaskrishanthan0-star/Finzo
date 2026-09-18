@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finzo</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="settings">设置</string>
+    <string name="preferences">偏好设置</string>
+    <string name="theme">主题</string>
+    <string name="dark">深色</string>
+    <string name="currency">货币</string>
+    <string name="language">语言</string>
+    <string name="security">安全</string>
+    <string name="change_username">更改用户名</string>
+    <string name="change_password">更改密码</string>
+    <string name="lock_finzo_app">锁定 Finzo</string>
+    <string name="data_export">Data &amp; Export</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="about">About Finzo</string>
+    <string name="version">Version</string>
+    <string name="developer">Developer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="income">收入</string>
+    <string name="expenses">支出</string>
+    <string name="balance">余额</string>
+    <string name="expense_rate">Expense Rate</string>
+    <string name="transactions">交易</string>
+    <string name="add_transaction">添加交易</string>
+</resources>

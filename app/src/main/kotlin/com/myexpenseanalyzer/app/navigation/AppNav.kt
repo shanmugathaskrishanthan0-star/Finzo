@@ -1,8 +1,8 @@
-
 package com.myexpenseanalyzer.app.navigation
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.os.LocaleListCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -836,6 +837,33 @@ fun AppNav(
                             selectedTheme = theme
 
                             onThemeChange(theme)
+                        },
+
+                        // =================================================
+                        // LANGUAGE CHANGE
+                        // =================================================
+
+                        onLanguageChange = { languageCode ->
+
+                            context
+                                .getSharedPreferences(
+                                    "finzo_settings",
+                                    android.content.Context.MODE_PRIVATE
+                                )
+                                .edit()
+                                .putString(
+                                    "language",
+                                    languageCode
+                                )
+                                .apply()
+
+                            AppCompatDelegate
+                                .setApplicationLocales(
+                                    LocaleListCompat
+                                        .forLanguageTags(
+                                            languageCode
+                                        )
+                                )
                         },
 
                         onLockApp = {

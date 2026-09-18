@@ -1,4 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Finzo</string>
+
+    <!-- Common -->
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="preferences">Preferences</string>
+    <string name="theme">Theme</string>
+    <string name="dark">Dark</string>
+    <string name="currency">Currency</string>
+    <string name="language">Language</string>
+
+    <!-- Security -->
+    <string name="security">Security</string>
+    <string name="change_username">Change Username</string>
+    <string name="change_password">Change Password</string>
+    <string name="lock_finzo_app">Lock Finzo</string>
+
+    <!-- Data -->
+    <string name="data_export">Data &amp; Export</string>
+    <string name="export_csv">Export CSV</string>
+
+    <!-- About -->
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="developer">Developer</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard">Dashboard</string>
+    <string name="income">Income</string>
+    <string name="expenses">Expenses</string>
+    <string name="balance">Balance</string>
+    <string name="expense_rate">Expense Rate</string>
+    <string name="transactions">Transactions</string>
+    <string name="add_transaction">Add Transaction</string>
+
 </resources>

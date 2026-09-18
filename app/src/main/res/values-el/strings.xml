@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finzo</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="preferences">Προτιμήσεις</string>
+    <string name="theme">Θέμα</string>
+    <string name="dark">Σκούρο</string>
+    <string name="currency">Νόμισμα</string>
+    <string name="language">Γλώσσα</string>
+    <string name="security">Ασφάλεια</string>
+    <string name="change_username">Αλλαγή ονόματος χρήστη</string>
+    <string name="change_password">Αλλαγή κωδικού</string>
+    <string name="lock_finzo_app">Κλείδωμα Finzo</string>
+    <string name="data_export">Data &amp; Export</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="about">About Finzo</string>
+    <string name="version">Version</string>
+    <string name="developer">Developer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="income">Έσοδα</string>
+    <string name="expenses">Έξοδα</string>
+    <string name="balance">Υπόλοιπο</string>
+    <string name="expense_rate">Expense Rate</string>
+    <string name="transactions">Συναλλαγές</string>
+    <string name="add_transaction">Προσθήκη συναλλαγής</string>
+</resources>

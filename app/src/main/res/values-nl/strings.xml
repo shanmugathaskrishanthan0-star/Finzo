@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finzo</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="settings">Instellingen</string>
+    <string name="preferences">Voorkeuren</string>
+    <string name="theme">Thema</string>
+    <string name="dark">Donker</string>
+    <string name="currency">Valuta</string>
+    <string name="language">Taal</string>
+    <string name="security">Beveiliging</string>
+    <string name="change_username">Gebruikersnaam wijzigen</string>
+    <string name="change_password">Wachtwoord wijzigen</string>
+    <string name="lock_finzo_app">Finzo vergrendelen</string>
+    <string name="data_export">Data &amp; Export</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="about">About Finzo</string>
+    <string name="version">Version</string>
+    <string name="developer">Developer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="income">Inkomsten</string>
+    <string name="expenses">Uitgaven</string>
+    <string name="balance">Saldo</string>
+    <string name="expense_rate">Expense Rate</string>
+    <string name="transactions">Transacties</string>
+    <string name="add_transaction">Transactie toevoegen</string>
+</resources>

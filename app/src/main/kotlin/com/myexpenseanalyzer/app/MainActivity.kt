@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -12,8 +13,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.core.os.LocaleListCompat
 
 import com.myexpenseanalyzer.app.navigation.AppNav
+import com.myexpenseanalyzer.app.security.CreateAccountScreen
 import com.myexpenseanalyzer.app.security.SecurityLoginScreen
 import com.myexpenseanalyzer.app.security.SecurityManager
 import com.myexpenseanalyzer.app.ui.splash.SplashScreen
@@ -32,6 +35,8 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        applySavedLanguage()
+
         val securityManager = SecurityManager(this)
 
         checkForUpdates()
@@ -41,75 +46,56 @@ class MainActivity : FragmentActivity() {
             SplashScreen(
                 onFinished = {
 
-                    showLogin(
-                        securityManager = securityManager
-                    )
+                    if (securityManager.hasAccount()) {
+
+                        showLogin(
+                            securityManager = securityManager
+                        )
+
+                    } else {
+
+                        showCreateAccount(
+                            securityManager = securityManager
+                        )
+                    }
                 }
             )
 
-            if (showUpdateDialog.value) {
-
-                val info = updateInfo.value
-
-                if (info != null) {
-
-                    AlertDialog(
-                        onDismissRequest = {
-                            showUpdateDialog.value = false
-                        },
-
-                        title = {
-                            Text("Finzo Update Available")
-                        },
-
-                        text = {
-                            Text(
-                                "A new version of Finzo is available.\n\n" +
-                                        "Latest version: ${info.versionName}\n\n" +
-                                        "Update now to get the latest features and fixes."
-                            )
-                        },
-
-                        confirmButton = {
-
-                            TextButton(
-                                onClick = {
-
-                                    showUpdateDialog.value = false
-
-                                    val intent = Intent(
-                                        Intent.ACTION_VIEW,
-                                        Uri.parse(info.apkUrl)
-                                    )
-
-                                    startActivity(intent)
-                                }
-                            ) {
-                                Text("UPDATE")
-                            }
-                        },
-
-                        dismissButton = {
-
-                            TextButton(
-                                onClick = {
-                                    showUpdateDialog.value = false
-                                }
-                            ) {
-                                Text("LATER")
-                            }
-                        }
-                    )
-                }
-            }
+            showUpdateDialogIfNeeded()
         }
     }
+
+    // ==========================================================
+    // LANGUAGE
+    // ==========================================================
+
+    private fun applySavedLanguage() {
+
+        val preferences = getSharedPreferences(
+            "finzo_settings",
+            MODE_PRIVATE
+        )
+
+        val savedLanguage = preferences.getString(
+            "language",
+            "en"
+        ) ?: "en"
+
+        AppCompatDelegate.setApplicationLocales(
+            LocaleListCompat.forLanguageTags(savedLanguage)
+        )
+    }
+
+    // ==========================================================
+    // UPDATE CHECK
+    // ==========================================================
 
     private fun checkForUpdates() {
 
         lifecycleScope.launch {
 
-            val result = UpdateChecker.check(this@MainActivity)
+            val result =
+                UpdateChecker.check(this@MainActivity)
 
             if (
                 result != null &&
@@ -122,6 +108,35 @@ class MainActivity : FragmentActivity() {
             }
         }
     }
+
+    // ==========================================================
+    // CREATE ACCOUNT
+    // ==========================================================
+
+    private fun showCreateAccount(
+        securityManager: SecurityManager
+    ) {
+
+        setContent {
+
+            CreateAccountScreen(
+                securityManager = securityManager,
+
+                onAccountCreated = {
+
+                    showApp(
+                        securityManager = securityManager
+                    )
+                }
+            )
+
+            showUpdateDialogIfNeeded()
+        }
+    }
+
+    // ==========================================================
+    // LOGIN
+    // ==========================================================
 
     private fun showLogin(
         securityManager: SecurityManager
@@ -147,18 +162,25 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    // ==========================================================
+    // MAIN APP
+    // ==========================================================
+
     private fun showApp(
         securityManager: SecurityManager,
-        vm: ExpenseViewModel
+        vm: ExpenseViewModel? = null
     ) {
 
         setContent {
 
+            val expenseViewModel =
+                vm ?: viewModel<ExpenseViewModel>()
+
             AppNav(
-                vm = vm,
+                vm = expenseViewModel,
 
                 onThemeChange = {
-                    // Dark theme only
+                    // Finzo uses Dark theme only
                 },
 
                 onLockApp = {
@@ -173,6 +195,10 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    // ==========================================================
+    // UPDATE DIALOG
+    // ==========================================================
+
     @androidx.compose.runtime.Composable
     private fun showUpdateDialogIfNeeded() {
 
@@ -184,6 +210,7 @@ class MainActivity : FragmentActivity() {
         ) {
 
             AlertDialog(
+
                 onDismissRequest = {
                     showUpdateDialog.value = false
                 },
@@ -193,6 +220,7 @@ class MainActivity : FragmentActivity() {
                 },
 
                 text = {
+
                     Text(
                         "A new version of Finzo is available.\n\n" +
                                 "Latest version: ${info.versionName}\n\n" +
@@ -203,6 +231,7 @@ class MainActivity : FragmentActivity() {
                 confirmButton = {
 
                     TextButton(
+
                         onClick = {
 
                             showUpdateDialog.value = false
@@ -214,7 +243,9 @@ class MainActivity : FragmentActivity() {
 
                             startActivity(intent)
                         }
+
                     ) {
+
                         Text("UPDATE")
                     }
                 },
@@ -222,10 +253,13 @@ class MainActivity : FragmentActivity() {
                 dismissButton = {
 
                     TextButton(
+
                         onClick = {
                             showUpdateDialog.value = false
                         }
+
                     ) {
+
                         Text("LATER")
                     }
                 }
@@ -233,3 +267,4 @@ class MainActivity : FragmentActivity() {
         }
     }
 }
+

@@ -19,7 +19,7 @@ class SecurityManager(context: Context) {
     }
 
     // =========================
-    // GET SAVED USERNAME
+    // GET USERNAME
     // =========================
 
     fun getUsername(): String {
@@ -68,5 +68,31 @@ class SecurityManager(context: Context) {
             .remove("username")
             .remove("password")
             .apply()
+    }
+
+    // =========================
+    // BACKUP DATA
+    // =========================
+
+    fun getPassword(): String {
+        return prefs.getString("password", "") ?: ""
+    }
+
+    fun getBackupData(): String {
+        return getUsername() + "\n" + getPassword()
+    }
+
+    // =========================
+    // RESTORE ACCOUNT
+    // =========================
+
+    fun restoreAccount(
+        username: String,
+        password: String
+    ) {
+        setAccount(
+            username = username,
+            password = password
+        )
     }
 }

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Finzo</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="settings">સેટિંગ્સ</string>
+    <string name="preferences">પસંદગીઓ</string>
+    <string name="theme">થીમ</string>
+    <string name="dark">ડાર્ક</string>
+    <string name="currency">ચલણ</string>
+    <string name="language">ભાષા</string>
+    <string name="security">સુરક્ષા</string>
+    <string name="change_username">વપરાશકર્તા નામ બદલો</string>
+    <string name="change_password">પાસવર્ડ બદલો</string>
+    <string name="lock_finzo_app">Finzo લોક કરો</string>
+    <string name="data_export">Data &amp; Export</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="about">About Finzo</string>
+    <string name="version">Version</string>
+    <string name="developer">Developer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="income">આવક</string>
+    <string name="expenses">ખર્ચ</string>
+    <string name="balance">બેલેન્સ</string>
+    <string name="expense_rate">Expense Rate</string>
+    <string name="transactions">વ્યવહારો</string>
+    <string name="add_transaction">વ્યવહાર ઉમેરો</string>
+</resources>

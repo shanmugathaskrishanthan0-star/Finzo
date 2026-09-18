@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Finzo</string>
+
+    <string name="cancel">Скасувати</string>
+    <string name="save">Зберегти</string>
+    <string name="delete">Видалити</string>
+    <string name="edit">Редагувати</string>
+    <string name="close">Закрити</string>
+    <string name="confirm">Підтвердити</string>
+    <string name="done">Готово</string>
+    <string name="search">Пошук</string>
+    <string name="back">Назад</string>
+
+    <string name="settings">Налаштування</string>
+    <string name="preferences">Параметри</string>
+    <string name="theme">Тема</string>
+    <string name="dark">Темна</string>
+    <string name="currency">Валюта</string>
+    <string name="language">Мова</string>
+
+    <string name="security">Безпека</string>
+    <string name="change_username">Змінити ім’я користувача</string>
+    <string name="change_password">Змінити пароль</string>
+    <string name="lock_finzo_app">Заблокувати Finzo</string>
+
+    <string name="data_export">Дані та експорт</string>
+    <string name="export_csv">Експорт CSV</string>
+
+    <string name="about">Про Finzo</string>
+    <string name="version">Версія</string>
+    <string name="developer">Розробник</string>
+
+    <string name="dashboard">Панель керування</string>
+    <string name="income">Доходи</string>
+    <string name="expenses">Витрати</string>
+    <string name="balance">Баланс</string>
+    <string name="expense_rate">Рівень витрат</string>
+    <string name="transactions">Транзакції</string>
+    <string name="add_transaction">Додати транзакцію</string>
+
+</resources>

@@ -12,8 +12,8 @@ android {
         applicationId = "com.myexpenseanalyzer.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = 5
-        versionName = "4.0"
+        versionCode = 6
+        versionName = "4.1"
     }
 
     buildFeatures {
@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+
+    // Compose
     implementation(platform("androidx.compose:compose-bom:2026.08.00"))
 
     implementation("androidx.activity:activity-compose:1.13.0")
@@ -41,23 +43,28 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material:material-icons-extended")
 
+    // AppCompat - App Language
+    implementation("androidx.appcompat:appcompat:1.7.1")
+
+    // Lifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.11.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.11.0")
 
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.10.1")
 
+    // Android Core
     implementation("androidx.core:core-ktx:1.19.0")
 
-    // Biometric / Fingerprint
-    implementation("androidx.biometric:biometric:1.1.0")
-
+    // Room Database
     implementation("androidx.room:room-runtime:2.8.5")
     implementation("androidx.room:room-ktx:2.8.5")
     ksp("androidx.room:room-compiler:2.8.5")
 
+    // DataStore
     implementation("androidx.datastore:datastore-preferences:1.2.1")
 
-    implementation("androidx.lifecycle:lifecycle-process:2.11.0")
-
+    // Debug
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
